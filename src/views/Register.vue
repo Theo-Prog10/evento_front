@@ -13,7 +13,7 @@
         <Button type="submit">Registrar</Button>
       </form>
       <p v-if="errorMessage" class="error">{{ errorMessage }}</p>
-      <p>Já tem uma conta? <span @click="goToLogin">Faça login</span></p>
+      <p><span class="link" @click="goToLogin">Já tem uma conta? Faça login</span></p>
     </div>
   </template>
   
@@ -81,5 +81,8 @@
     display: flex;
     flex-direction: column;
     gap: 10px;
+  }
+  .link {
+  cursor: pointer; /* Altera o cursor para pointer */
   }
   </style>

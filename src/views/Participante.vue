@@ -1,73 +1,77 @@
 <template>
     <div class="participante-container">
-      <h1>Eventos Disponíveis</h1>
-      <div v-if="eventosDisponiveis.length > 0" class="eventos-lista">
+        <h1>Eventos Disponíveis</h1>
+        <div v-if="eventosDisponiveis.length > 0" class="eventos-lista">
         <div v-for="evento in eventosDisponiveis" :key="evento.id" class="evento-item">
-          <h2>{{ evento.nome }}</h2>
-          <p>{{ evento.descricao }}</p>
-          <p>Data: {{ evento.data }} | Horário: {{ evento.horario }}</p>
-          <Button @click="inscrever(evento.id)">Inscrever-se</Button>
+            <h2>{{ evento.nome }}</h2>
+            <p>{{ evento.descricao }}</p>
+            <p>{{ evento.nomeLocal }}</p>
+            <p>Data: {{ evento.data }} - {{ evento.horario }}</p>
+            <Button @click="inscrever(evento.id)">Inscrever-se</Button>
         </div>
-      </div>
-      <p v-else>Nenhum evento disponível no momento.</p>
-  
-      <h1>Eventos Inscritos</h1>
-      <div v-if="eventosInscritos.length > 0" class="eventos-lista">
-        <div v-for="evento in eventosInscritos" :key="evento.id" class="evento-item">
-          <span>{{ evento.nome }}</span>
-          <span>{{ evento.descricao }}</span>
-          <span>Data: {{ evento.data }} | Horário: {{ evento.horario }}</span>
-          <Button @click="sair(evento.id)">Sair do Evento</Button>
-        </div>
-      </div>
-      <p v-else>Você não está inscrito em nenhum evento.</p>
     </div>
-  </template>
+    <p v-else>Nenhum evento disponível no momento.</p>
   
-  <script setup>
-  import { ref, onMounted } from "vue";
-  import { EventoController } from "@/controllers/EventoController";
-  import { InscricaoController } from "@/controllers/InscricaoController";
-  import Button from "@/components/common/Button.vue";
+    <h1>Eventos Inscritos</h1>
+    <div v-if="eventosInscritos.length > 0" class="eventos-lista">
+        <div v-for="evento in eventosInscritos" :key="evento.id" class="evento-item">
+            <span>{{ evento.nome }}</span>
+            <span>{{ evento.descricao }}</span>
+            <span>{{ evento.nomeLocal }}</span>
+            <span>Data: {{ evento.data }} - {{ evento.horario }}</span>
+            <Button @click="sair(evento.id)">Sair do Evento</Button>
+        </div>
+    </div>
+    <p v-else>Você não está inscrito em nenhum evento.</p>
+    </div>
+</template>
   
-  const eventosDisponiveis = ref([]);
-  const eventosInscritos = ref([]);
-  const participanteId = JSON.parse(localStorage.getItem("user")).id; // ID do participante logado
+<script setup>
+    import { ref, onMounted } from "vue";
+    import { EventoController } from "@/controllers/EventoController";
+    import { InscricaoController } from "@/controllers/InscricaoController";
+    import Button from "@/components/common/Button.vue";
+    
+    const eventosDisponiveis = ref([]);
+    const eventosInscritos = ref([]);
+    const participanteId = JSON.parse(localStorage.getItem("user")).id; // ID do participante logado
+    
+    onMounted(async () => {
+    const eventos = await EventoController.getEventos();
   
-  onMounted(async () => {
-  const eventos = await EventoController.getEventos();
-  
-  eventosDisponiveis.value = eventos.filter(
-    (evento) => Array.isArray(evento.participantes) && !evento.participantes.includes(participanteId)
-  );
+    eventosDisponiveis.value = eventos.filter(
+        (evento) => Array.isArray(evento.participantes) && !evento.participantes.includes(participanteId)
+    );
 
-  eventosInscritos.value = eventos.filter(
-    (evento) => Array.isArray(evento.participantes) && evento.participantes.includes(participanteId)
-  );
+    eventosInscritos.value = eventos.filter(
+        (evento) => Array.isArray(evento.participantes) && evento.participantes.includes(participanteId)
+    );
 });
-  
-  // Inscreve o participante em um evento
-  const inscrever = async (eventoId) => {
-    const success = await InscricaoController.inscreverParticipante(eventoId, participanteId);
-    if (success) {
-      alert("Inscrição realizada com sucesso!");
-      window.location.reload(); // Recarrega a página para atualizar a lista
-    } else {
-      alert("Erro ao inscrever-se no evento.");
-    }
-  };
+    const loading = ref(false);
+    // Inscreve o participante em um evento
+    const inscrever = async (eventoId) => {
+        if (loading.value) return; // Evita múltiplas inscrições
+        loading.value = true;
+        const success = await InscricaoController.inscreverParticipante(eventoId, participanteId);
+        if (success) {
+            alert("Inscrito com sucesso.");
+            window.location.reload(); // Recarrega a página para atualizar a lista
+        } else {
+            alert("Erro ao inscrever-se no evento.");
+        }
+    };
   
   // Remove o participante de um evento
-  const sair = async (eventoId) => {
-    const success = await InscricaoController.removerParticipante(eventoId, participanteId);
-    if (success) {
-      alert("Você saiu do evento com sucesso!");
-      window.location.reload(); // Recarrega a página para atualizar a lista
-    } else {
-      alert("Erro ao sair do evento.");
-    }
-  };
-  </script>
+    const sair = async (eventoId) => {
+        const success = await InscricaoController.removerParticipante(eventoId, participanteId);
+        if (success) {
+            alert("Desinscrito com sucesso.");
+            window.location.reload(); // Recarrega a página para atualizar a lista
+        } else {
+        alert("Erro ao sair do evento.");
+        }
+    };
+</script>
   
   <style scoped>
   .participante-container {
@@ -86,8 +90,11 @@
     display: flex;
     justify-content: space-between;
     align-items: center;
-    gap: 10px; /* Espaçamento entre os itens */
+    gap: 10px;
+    padding: 15px;
+    border: 1px solid #ddd;
+    border-radius: 8px;
+    background-color: #f9f9f9;
   }
 
-  
   </style>

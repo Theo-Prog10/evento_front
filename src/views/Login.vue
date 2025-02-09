@@ -5,7 +5,7 @@
     <Input v-model="senha" type="password" placeholder="Digite sua senha" />
     <Button @click="handleLogin">Entrar</Button>
     <p v-if="errorMessage" class="error">{{ errorMessage }}</p>
-    <p>Não tem uma conta? <span @click="goToRegister">Registre-se</span></p>
+    <p><span class="link" @click="goToRegister">Não tem uma conta? Registre-se</span></p>
   </div>
 </template>
 
@@ -52,5 +52,9 @@ const goToRegister = () => {
 
 .error {
   color: red;
+}
+
+.link {
+  cursor: pointer; /* Altera o cursor para pointer */
 }
 </style>

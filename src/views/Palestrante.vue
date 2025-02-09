@@ -1,11 +1,12 @@
 <template>
     <div class="palestrante-container">
-      <h1>Eventos Inscritos</h1>
+      <h1>Eventos Palestrados</h1>
       <div v-if="eventosInscritos.length > 0" class="eventos-lista">
         <div v-for="evento in eventosInscritos" :key="evento.id" class="evento-item">
           <span>{{ evento.nome }}</span>
           <span>{{ evento.descricao }}</span>
-          <span>Data: {{ evento.data }} | Horário: {{ evento.horario }}</span>
+          <span>{{ evento.nomeLocal }}</span>
+          <span>Data: {{ evento.data }} - {{ evento.horario }}</span>
           <Button @click="sair(evento.id)">Sair do Evento</Button>
         </div>
       </div>
@@ -30,8 +31,11 @@
     );
   });
   
+  const loading = ref(false);
   // Remove o palestrante de um evento
   const sair = async (eventoId) => {
+    if (loading.value) return; // Evita múltiplas inscrições
+    loading.value = true;
     const success = await InscricaoController.removerPalestrante(eventoId, palestranteId);
     if (success) {
       alert("Você saiu do evento com sucesso!");
@@ -59,6 +63,10 @@
     display: flex;
     justify-content: space-between;
     align-items: center;
-    gap: 10px; /* Espaçamento entre os itens */
+    gap: 10px;
+    padding: 15px;
+    border: 1px solid #ddd;
+    border-radius: 8px;
+    background-color: #f9f9f9;
   }
   </style>
