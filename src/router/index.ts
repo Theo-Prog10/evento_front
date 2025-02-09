@@ -7,6 +7,8 @@ import Palestrante from "@/views/Palestrante.vue";
 import Organizador from "@/views/Organizador.vue";
 import EditarPerfil from "@/views/EditarPerfil.vue";
 import CriarLocal from "@/views/CriarLocal.vue";
+import EditarEvento from "@/views/EditarEvento.vue";
+import CriarEvento from "@/views/CriarEvento.vue";
 
 const routes = [
   { path: "/", redirect: "/login" },
@@ -18,6 +20,8 @@ const routes = [
   { path: "/organizador", component: Organizador },
   { path: "/editar-perfil", component: EditarPerfil },
   { path: "/criar-local", component: CriarLocal },
+  { path: "/editar-evento/:id", component: EditarEvento },
+  { path: "/criar-evento", component: CriarEvento }
 ];
 
 const router = createRouter({

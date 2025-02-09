@@ -12,6 +12,10 @@ export class LocalController {
     return await LocalService.getLocal(id);
   }
 
+  static async getLocais(): Promise<LocalDTOResponse> {
+    return await LocalService.getLocais();
+  }
+
   // Método para atualizar os dados da Local
   static async updateLocal(id: number, data: LocalDTORequest): Promise<void> {
     await LocalService.updateLocal(id, data);

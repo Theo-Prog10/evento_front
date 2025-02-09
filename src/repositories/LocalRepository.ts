@@ -14,6 +14,12 @@ export class LocalRepository {
     return response.data;
   }
 
+  // Método para buscar os dados da Local
+  static async getLocais(): Promise<LocalDTOResponse> {
+    const response = await api.get<LocalDTOResponse>(`/locais`);
+    return response.data;
+  }
+
   // Método para atualizar os dados da Local
   static async updateLocal(id: number, data: LocalDTORequest): Promise<void> {
     await api.put(`/local/${id}`, data);
