@@ -20,5 +20,5 @@ export class EventoRepository {
     static async register(data: EventoDTORequest): Promise<EventoDTOResponse> {
       const response = await api.post<EventoDTOResponse>("/eventos", data);
       return response.data;
-    }
+  }
 }

@@ -15,4 +15,9 @@ export class InscricaoService {
   static async removerPalestrante(eventoId: number, palestranteId: number): Promise<boolean> {
     return await InscricaoRepository.removerPalestrante(eventoId, palestranteId);
   }
+
+  // Método para inscrever o palestrante em um evento
+  static async inscreverPalestrante(eventoId: number, palestranteId: number): Promise<boolean> {
+    return await InscricaoRepository.inscreverPalestrante(eventoId, palestranteId);
+  }
 }
