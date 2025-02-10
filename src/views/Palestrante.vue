@@ -1,5 +1,8 @@
 <template>
   <div class="palestrante-container">
+    <header class="palestrante-header">
+      <Button class = "button" @click="goToDashboard">Dashboard</Button>
+    </header>
     <h1>Eventos Disponíveis</h1>
     <div v-if="eventosDisponiveis.length > 0" class="eventos-lista">
       <div v-for="evento in eventosDisponiveis" :key="evento.id" class="evento-item">
@@ -19,7 +22,7 @@
         <span>{{ evento.descricao }}</span>
         <span>{{ evento.nomeLocal }}</span>
         <span>Data: {{ evento.data }} - {{ evento.horario }}</span>
-        <Button @click="sair(evento.id)">Sair do Evento</Button>
+        <Button class="sair" @click="sair(evento.id)">Sair do Evento</Button>
       </div>
     </div>
     <p v-else>Você não está palestrando em nenhum evento.</p>
@@ -31,10 +34,17 @@ import { ref, onMounted } from "vue";
 import { EventoController } from "@/controllers/EventoController";
 import { InscricaoController } from "@/controllers/InscricaoController";
 import Button from "@/components/common/Button.vue";
+import { useRouter } from "vue-router";
 
 const eventosDisponiveis = ref([]);
 const eventosPalestrados = ref([]);
 const palestranteId = JSON.parse(localStorage.getItem("user")).id; // ID do palestrante logado
+
+const router = useRouter();
+// Redireciona para o dashboard
+const goToDashboard = () => {
+    router.push("/dashboard");
+  };
 
 // Busca os eventos disponíveis e os eventos palestrados ao carregar a tela
 onMounted(async () => {
@@ -103,4 +113,20 @@ const sair = async (eventoId) => {
   border-radius: 8px;
   background-color: #f9f9f9;
 }
+.sair {
+  background-color: #f44336;
+  color: white;
+}
+
+.button {
+    background-color: #4caf50;
+    color: white;
+  }
+
+  .palestrante-header {
+    display: flex;
+    justify-content: flex-end;
+    gap: 10px;
+    margin-bottom: 20px;
+  }
 </style>

@@ -3,7 +3,7 @@
       <h1>Detalhes do Evento</h1>
       <div v-if="evento" class="evento-detalhes">
         <h2>{{ evento.nome }}</h2>
-        <p>{{ evento.descricao }}</p>
+        <p>Descrição: {{ evento.descricao }}</p>
         <p>Local: {{ evento.nomeLocal }}</p>
         <p>Data: {{ evento.data }} - {{ evento.horario }}</p>
   
@@ -81,8 +81,8 @@
   }
   
   ul {
-    list-style-type: none;
-    padding: 0;
+    list-style-type: disc;
+    padding-left: 20px;
   }
   
   li {

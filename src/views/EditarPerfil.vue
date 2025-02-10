@@ -8,10 +8,13 @@
         <Input v-model="form.biografia" placeholder="Biografia" />
         <Input v-model="form.especialidade" placeholder="Especialidade" />
         <Input v-model="form.contato" placeholder="Contato" />
-        <Button type="submit">Salvar Alterações</Button>
+        <div class="botao">
+          <Button type="submit">Salvar Alterações</Button>
+          <Button @click="goBack">Voltar</Button>
+        </div>
       </form>
       <p v-if="errorMessage" class="error">{{ errorMessage }}</p>
-      <Button @click="goBack">Voltar</Button>
+      
     </div>
   </template>
   
@@ -79,5 +82,12 @@
   
   .error {
     color: red;
+  }
+
+  .botao {
+    display: flex;
+    justify-content: center;
+    gap: 10px;
+    margin-top: 20px;
   }
   </style>

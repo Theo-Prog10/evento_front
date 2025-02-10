@@ -6,15 +6,16 @@
         <Input v-model="form.descricao" placeholder="Descrição" />
         <Input v-model="form.data" type="date" placeholder="Data" />
         <Input v-model="form.horario" type="time" placeholder="Horário" />
-  
-        <!-- Dropdown para locais -->
         <select v-model="form.idLocal" class="dropdown">
           <option v-for="local in locais" :key="local.id" :value="local.id">
             {{ local.nome }}
           </option>
         </select>
   
-        <Button type="submit">Criar Evento</Button>
+        <div class="botao">
+          <Button type="submit">Criar Evento</Button>
+          <Button @click="goBack">Voltar</Button>
+        </div>
       </form>
       <p v-if="errorMessage" class="error">{{ errorMessage }}</p>
     </div>
@@ -59,20 +60,22 @@
   
   // Função para enviar o formulário
   const handleSubmit = async () => {
-  if (!form.value.nome || !form.value.descricao || !form.value.data || !form.value.horario || !form.value.idLocal) {
-    errorMessage.value = "Preencha todos os campos obrigatórios!";
-    return;
-  }
+  if (
+    !form.value.nome || 
+    !form.value.descricao || 
+    !form.value.data || 
+    !form.value.horario || 
+    !form.value.idLocal
+    ) {
+        errorMessage.value = "Preencha todos os campos obrigatórios!";
+        return;
+    }
 
   try {
-    // Recuperar o usuário logado do localStorage
     const organizadorIdSessao = JSON.parse(localStorage.getItem("user")).id;
-
-    // Criar o objeto de atualização com o ID do organizador
-    const eventoId = route.params.id;
     const updateData = {
       ...form.value,
-      idOrganizador: organizadorIdSessao, // Adicionar o ID do organizador
+      idOrganizador: organizadorIdSessao,
     };
 
     // Chamar o método de atualização
@@ -82,15 +85,18 @@
     router.push("/organizador"); // Redireciona para a página do organizador
   } catch (error) {
     errorMessage.value = "Erro ao atualizar o evento.";
-    console.error(error); // Ajuda a depurar o erro
   }
 };
 
-  
   // Carrega os dados do evento e a lista de locais ao montar o componente
   onMounted(() => {
     loadLocais();
   });
+
+  // Volta para o organizador
+  const goBack = () => {
+    router.push("/organizador");
+  };
   </script>
   
   <style scoped>
@@ -117,7 +123,14 @@
   }
   
   .link {
-    cursor: pointer; /* Altera o cursor para pointer */
+    cursor: pointer; 
+  }
+
+  .botao {
+    display: flex;
+    justify-content: center;
+    gap: 10px;
+    margin-top: 20px;
   }
   </style>
   

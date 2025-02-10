@@ -2,8 +2,9 @@
     <div class="organizador-container">
       <!-- Cabeçalho com botões de criar evento e local -->
       <header class="organizador-header">
-        <Button @click="goToCriarEvento">Criar Evento</Button>
-        <Button @click="goToCriarLocal">Criar Local</Button>
+        <Button class = "button" @click="goToDashboard">Dashboard</Button>
+        <Button class = "button" @click="goToCriarEvento">Criar Evento</Button>
+        <Button class = "button" @click="goToCriarLocal">Criar Local</Button>
       </header>
   
       <!-- Lista de eventos organizados -->
@@ -13,11 +14,11 @@
           <h2>{{ evento.nome }}</h2>
           <p>{{ evento.descricao }}</p>
           <p>{{ evento.nomeLocal }}</p>
-          <p>Data: {{ evento.data }} - {{ evento.horario }}</p>
+          <p>{{ evento.data }} - {{ evento.horario }}</p>
           <div class="evento-actions">
-            <Button @click="editarEvento(evento.id)">Editar</Button>
-            <Button @click="removerEvento(evento.id)">Deletar</Button>
             <Button @click="exibirDetalhes(evento.id)">Exibir Detalhes</Button>
+            <Button class="editar" @click="editarEvento(evento.id)">Editar</Button>
+            <Button class="delete" @click="removerEvento(evento.id)">Deletar</Button>
           </div>
         </div>
       </div>
@@ -43,6 +44,11 @@
     );
   });
   
+  // Redireciona para o dashboard
+  const goToDashboard = () => {
+    router.push("/dashboard");
+  };
+
   // Redireciona para a tela de criação de evento
   const goToCriarEvento = () => {
     router.push("/criar-evento");
@@ -110,5 +116,20 @@
     display: flex;
     gap: 10px;
     margin-top: 10px;
+  }
+
+  .delete {
+    background-color: #f44336;
+    color: white;
+  }
+
+  .editar {
+    background-color: #d3b50c;
+    color: white;
+  }
+
+  .button {
+    background-color: #4caf50;
+    color: white;
   }
   </style>

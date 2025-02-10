@@ -8,10 +8,12 @@
         <Input v-model="form.uf" placeholder="UF" />
         <Input v-model="form.cidade" placeholder="Cidade" />
         <Input v-model="form.bairro" placeholder="Bairro" />
-        <Button type="submit">Criar local</Button>
+        <div class="botao">
+          <Button type="submit">Criar Local</Button>
+          <Button @click="goBack">Voltar</Button>
+        </div>
       </form>
       <p v-if="errorMessage" class="error">{{ errorMessage }}</p>
-      <Button @click="goBack">Voltar</Button>
     </div>
   </template>
   
@@ -80,5 +82,11 @@
   
   .error {
     color: red;
+  }
+  .botao {
+    display: flex;
+    justify-content: center;
+    gap: 10px;
+    margin-top: 20px;
   }
   </style>
