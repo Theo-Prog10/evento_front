@@ -21,4 +21,8 @@ export class EventoRepository {
       const response = await api.post<EventoDTOResponse>("/eventos", data);
       return response.data;
   }
+    static async removerEvento(id: number): Promise<boolean> {
+      const response = await api.delete<boolean>(`/evento/${id}`);
+      return response.data;
+    }
 }

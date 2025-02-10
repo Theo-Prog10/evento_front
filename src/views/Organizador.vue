@@ -14,7 +14,7 @@
           <h2>{{ evento.nome }}</h2>
           <p>{{ evento.descricao }}</p>
           <p>{{ evento.nomeLocal }}</p>
-          <p>{{ evento.data }} - {{ evento.horario }}</p>
+          <p>{{ formatarData(evento.data) }} - {{ evento.horario }}</p>
           <div class="evento-actions">
             <Button @click="exibirDetalhes(evento.id)">Exibir Detalhes</Button>
             <Button class="editar" @click="editarEvento(evento.id)">Editar</Button>
@@ -43,6 +43,11 @@
       (evento) => evento.idOrganizador === organizadorId
     );
   });
+
+  const formatarData = (data) => {
+    const [ano, mes, dia] = data.split("-");
+    return `${dia}/${mes}/${ano}`;
+  };
   
   // Redireciona para o dashboard
   const goToDashboard = () => {
@@ -83,7 +88,7 @@
   
   <style scoped>
   .organizador-container {
-    max-width: 800px;
+    max-width: 1000px;
     margin: 0 auto;
     padding: 20px;
   }

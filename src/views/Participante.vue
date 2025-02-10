@@ -1,31 +1,37 @@
 <template>
-    <div class="participante-container">
-        <header class="participante-header">
+<header class="participante-header">
             <Button class = "button" @click="goToDashboard">Dashboard</Button>
         </header>
-        <h1>Eventos Disponíveis</h1>
-        <div v-if="eventosDisponiveis.length > 0" class="eventos-lista">
-        <div v-for="evento in eventosDisponiveis" :key="evento.id" class="evento-item">
-            <h2>{{ evento.nome }}</h2>
-            <span>{{ evento.descricao }}</span>
-            <span>{{ evento.nomeLocal }}</span>
-            <span>{{ evento.data }} - {{ evento.horario }}</span>
-            <Button @click="inscrever(evento.id)">Inscrever-se</Button>
+    <div class="participante-container">
+        
+        <div class="esquerda">
+            <h1>Eventos Disponíveis</h1>
+            <div v-if="eventosDisponiveis.length > 0" class="eventos-lista">
+                <div v-for="evento in eventosDisponiveis" :key="evento.id" class="evento-item">
+                    <h2>{{ evento.nome }}</h2>
+                    <span>{{ evento.descricao }}</span>
+                    <span>{{ evento.nomeLocal }}</span>
+                    <span>{{ formatarData(evento.data) }} - {{ evento.horario }}</span>
+                    <Button @click="inscrever(evento.id)">Inscrever-se</Button>
+                </div>
+            </div>
+            <p v-else>Nenhum evento disponível no momento.</p>
         </div>
-    </div>
-    <p v-else>Nenhum evento disponível no momento.</p>
-  
-    <h1>Eventos Inscritos</h1>
-    <div v-if="eventosInscritos.length > 0" class="eventos-lista">
-        <div v-for="evento in eventosInscritos" :key="evento.id" class="evento-item">
-            <h2>{{ evento.nome }}</h2>
-            <span>{{ evento.descricao }}</span>
-            <span>{{ evento.nomeLocal }}</span>
-            <span>{{ evento.data }} - {{ evento.horario }}</span>
-            <Button class="sair" @click="sair(evento.id)">Sair do Evento</Button>
+        
+        <div class="direita">
+            <h1>Eventos Inscritos</h1>
+            <div v-if="eventosInscritos.length > 0" class="eventos-lista">
+                <div v-for="evento in eventosInscritos" :key="evento.id" class="evento-item">
+                    <h2>{{ evento.nome }}</h2>
+                    <span>{{ evento.descricao }}</span>
+                    <span>{{ evento.nomeLocal }}</span>
+                    <span>{{ formatarData(evento.data) }} - {{ evento.horario }}</span>
+                    <Button class="sair" @click="sair(evento.id)">Sair do Evento</Button>
+                </div>
+            </div>
+            <p v-else>Você não está inscrito em nenhum evento.</p>
         </div>
-    </div>
-    <p v-else>Você não está inscrito em nenhum evento.</p>
+        
     </div>
 </template>
   
@@ -44,6 +50,11 @@
     // Redireciona para o dashboard
     const goToDashboard = () => {
         router.push("/dashboard");
+    };
+
+    const formatarData = (data) => {
+        const [ano, mes, dia] = data.split("-");
+        return `${dia}/${mes}/${ano}`;
     };
     
     onMounted(async () => {
@@ -85,10 +96,21 @@
   
   <style scoped>
   .participante-container {
-    max-width: 800px;
     margin: 0 auto;
     padding: 20px;
+    display: flex;
+    justify-content: center;
+    gap: 20px;
+    margin-top: 20px;
   }
+    .esquerda,
+    .direita {
+    flex: 1;
+    max-width: 50%;
+    overflow: auto;
+    box-sizing: border-box;
+    text-align: center;
+    }
   
   .eventos-lista {
     display: flex;
@@ -120,6 +142,7 @@
     justify-content: flex-end;
     gap: 10px;
     margin-bottom: 20px;
+    padding: 20px;
   }
 
   </style>

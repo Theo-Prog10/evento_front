@@ -5,7 +5,7 @@
         <h2>{{ evento.nome }}</h2>
         <p>Descrição: {{ evento.descricao }}</p>
         <p>Local: {{ evento.nomeLocal }}</p>
-        <p>Data: {{ evento.data }} - {{ evento.horario }}</p>
+        <p>Data: {{ formatarData(evento.data) }} - {{ evento.horario }}</p>
   
         <h3>Palestrantes</h3>
         <ul v-if="palestrantes.length > 0">
@@ -37,6 +37,11 @@
   const evento = ref(null);
   const palestrantes = ref([]);
   const participantes = ref([]);
+
+  const formatarData = (data) => {
+    const [ano, mes, dia] = data.split("-");
+    return `${dia}/${mes}/${ano}`;
+  };
   
   // Busca os detalhes do evento ao carregar a tela
   onMounted(async () => {

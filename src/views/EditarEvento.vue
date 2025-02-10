@@ -63,7 +63,7 @@
           descricao: evento.descricao,
           data: evento.data, 
           horario: evento.horario,
-          local: evento.idLocal // Associa ao ID do local
+          idLocal: evento.idLocal // Associa ao ID do local
         };
       } else {
         errorMessage.value = "Evento não encontrado!";

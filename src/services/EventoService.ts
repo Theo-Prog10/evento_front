@@ -19,4 +19,8 @@ export class EventoService {
   static async register(data: EventoDTORequest): Promise<EventoDTOResponse> {
     return await EventoRepository.register(data);
   }
+
+  static async removerEvento(id: number): Promise<boolean> {
+    return await EventoRepository.removerEvento(id);
+  }
 }

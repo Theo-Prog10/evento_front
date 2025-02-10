@@ -17,6 +17,10 @@ export class EventoController {
   }
 
   static async register(data: EventoDTORequest): Promise<EventoDTOResponse> {
-      return await EventoService.register(data);
+    return await EventoService.register(data);
+  }
+
+  static async removerEvento(id: number): Promise<boolean> {
+    return await EventoService.removerEvento(id);
   }
 }

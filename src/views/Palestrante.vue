@@ -1,31 +1,35 @@
 <template>
+  <header class="palestrante-header">
+    <Button class = "button" @click="goToDashboard">Dashboard</Button>
+  </header>
   <div class="palestrante-container">
-    <header class="palestrante-header">
-      <Button class = "button" @click="goToDashboard">Dashboard</Button>
-    </header>
-    <h1>Eventos Disponíveis</h1>
-    <div v-if="eventosDisponiveis.length > 0" class="eventos-lista">
-      <div v-for="evento in eventosDisponiveis" :key="evento.id" class="evento-item">
-        <h2>{{ evento.nome }}</h2>
-        <p>{{ evento.descricao }}</p>
-        <p>{{ evento.nomeLocal }}</p>
-        <p>Data: {{ evento.data }} - {{ evento.horario }}</p>
-        <Button @click="inscrever(evento.id)">Inscrever-se como Palestrante</Button>
+    <div class="esquerda">
+      <h1>Eventos Disponíveis</h1>
+      <div v-if="eventosDisponiveis.length > 0" class="eventos-lista">
+        <div v-for="evento in eventosDisponiveis" :key="evento.id" class="evento-item">
+          <h2>{{ evento.nome }}</h2>
+          <p>{{ evento.descricao }}</p>
+          <p>{{ evento.nomeLocal }}</p>
+          <p>{{ formatarData(evento.data) }} - {{ evento.horario }}</p>
+          <Button @click="inscrever(evento.id)">Inscrever-se como Palestrante</Button>
+        </div>
       </div>
+      <p v-else>Nenhum evento disponível no momento.</p>
     </div>
-    <p v-else>Nenhum evento disponível no momento.</p>
-
-    <h1>Eventos Palestrados</h1>
-    <div v-if="eventosPalestrados.length > 0" class="eventos-lista">
-      <div v-for="evento in eventosPalestrados" :key="evento.id" class="evento-item">
-        <span>{{ evento.nome }}</span>
-        <span>{{ evento.descricao }}</span>
-        <span>{{ evento.nomeLocal }}</span>
-        <span>Data: {{ evento.data }} - {{ evento.horario }}</span>
-        <Button class="sair" @click="sair(evento.id)">Sair do Evento</Button>
+    
+    <div class="direita">
+      <h1>Eventos Palestrados</h1>
+      <div v-if="eventosPalestrados.length > 0" class="eventos-lista">
+        <div v-for="evento in eventosPalestrados" :key="evento.id" class="evento-item">
+          <span>{{ evento.nome }}</span>
+          <span>{{ evento.descricao }}</span>
+          <span>{{ evento.nomeLocal }}</span>
+          <span>{{ formatarData(evento.data) }} - {{ evento.horario }}</span>
+          <Button class="sair" @click="sair(evento.id)">Sair do Evento</Button>
+        </div>
       </div>
+      <p v-else>Você não está palestrando em nenhum evento.</p>
     </div>
-    <p v-else>Você não está palestrando em nenhum evento.</p>
   </div>
 </template>
 
@@ -45,6 +49,11 @@ const router = useRouter();
 const goToDashboard = () => {
     router.push("/dashboard");
   };
+
+const formatarData = (data) => {
+  const [ano, mes, dia] = data.split("-");
+  return `${dia}/${mes}/${ano}`;
+};
 
 // Busca os eventos disponíveis e os eventos palestrados ao carregar a tela
 onMounted(async () => {
@@ -92,10 +101,22 @@ const sair = async (eventoId) => {
 
 <style scoped>
 .palestrante-container {
-  max-width: 800px;
   margin: 0 auto;
   padding: 20px;
+    display: flex;
+    justify-content: center;
+    gap: 20px;
+    margin-top: 20px;
 }
+
+.esquerda,
+  .direita {
+  flex: 1;
+  max-width: 50%;
+  overflow: auto;
+  box-sizing: border-box;
+  text-align: center;
+  }
 
 .eventos-lista {
   display: flex;
@@ -128,5 +149,6 @@ const sair = async (eventoId) => {
     justify-content: flex-end;
     gap: 10px;
     margin-bottom: 20px;
+    padding: 20px;
   }
 </style>
