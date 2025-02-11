@@ -7,12 +7,10 @@ export class PessoaController {
     return await PessoaService.register(data);
   }
 
-  // Método para buscar os dados da pessoa
   static async getProfile(id: number): Promise<PessoaDTOResponse> {
     return await PessoaService.getProfile(id);
   }
 
-  // Método para atualizar os dados da pessoa
   static async updateProfile(id: number, data: PessoaDTORequest): Promise<void> {
     await PessoaService.updateProfile(id, data);
   }

@@ -35,9 +35,6 @@
   });
   const errorMessage = ref("");
   
- 
-  
-  // Envia o formulário de edição
   const submitForm = async () => {
     if (
       !form.value.nome ||
@@ -57,11 +54,10 @@
       router.push("/organizador");
     } catch (error) {
       errorMessage.value = `Erro ao criar local: ${error.message}`;
-      console.error(error); // Adicione isso para ver detalhes do erro no console
+      console.error(error);
     }
   };
   
-  // Volta para o organizador
   const goBack = () => {
     router.push("/organizador");
   };

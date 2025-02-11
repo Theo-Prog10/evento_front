@@ -32,7 +32,6 @@
   const router = useRouter();
   const route = useRoute();
   
-  // Formulário de edição
   const form = ref({
     nome: "",
     descricao: "",
@@ -41,24 +40,20 @@
     idLocal: ""
   });
   
-  // Lista de locais para o dropdown
   const locais = ref([]);
   
-  // Mensagem de erro
   const errorMessage = ref("");
   
-  // Função para carregar a lista de locais
   const loadLocais = async () => {
     try {
       const locaisResponse = await LocalController.getLocais();
       locais.value = locaisResponse;
     } catch (error) {
       errorMessage.value = "Erro ao carregar os locais.";
-      console.error(error); // Ajuda a depurar o erro
+      console.error(error);
     }
   };
   
-  // Função para enviar o formulário
   const handleSubmit = async () => {
   if (
     !form.value.nome || 
@@ -78,22 +73,20 @@
       idOrganizador: organizadorIdSessao,
     };
 
-    // Chamar o método de atualização
     await EventoController.register(updateData);
 
     alert("Evento atualizado com sucesso!");
-    router.push("/organizador"); // Redireciona para a página do organizador
+    router.push("/organizador");
   } catch (error) {
     errorMessage.value = "Erro ao atualizar o evento.";
   }
 };
 
-  // Carrega os dados do evento e a lista de locais ao montar o componente
   onMounted(() => {
     loadLocais();
   });
 
-  // Volta para o organizador
+
   const goBack = () => {
     router.push("/organizador");
   };
@@ -133,4 +126,3 @@
     margin-top: 20px;
   }
   </style>
-  

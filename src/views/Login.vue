@@ -30,8 +30,8 @@ const handleLogin = async () => {
   const pessoa = await AuthController.login(login.value, senha.value);
 
   if (pessoa) {
-    localStorage.setItem("user", JSON.stringify(pessoa)); // Salva os dados do usuário no localStorage
-    router.push("/dashboard"); // Redireciona para o dashboard
+    localStorage.setItem("user", JSON.stringify(pessoa));
+    router.push("/dashboard");
   } else {
     errorMessage.value = "Login ou senha inválidos!";
   }
@@ -55,6 +55,6 @@ const goToRegister = () => {
 }
 
 .link {
-  cursor: pointer; /* Altera o cursor para pointer */
+  cursor: pointer;
 }
 </style>

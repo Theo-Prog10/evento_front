@@ -52,8 +52,8 @@
     try {
       const pessoa = await PessoaController.register(form.value);
       if (pessoa) {
-        localStorage.setItem("user", JSON.stringify(pessoa)); // Salva os dados do usuário no localStorage
-        router.push("/dashboard"); // Redireciona para o dashboard
+        localStorage.setItem("user", JSON.stringify(pessoa));
+        router.push("/dashboard");
       }
     } catch (error) {
       errorMessage.value = "Erro ao registrar!";
@@ -83,6 +83,6 @@
     gap: 10px;
   }
   .link {
-  cursor: pointer; /* Altera o cursor para pointer */
+  cursor: pointer;
   }
   </style>

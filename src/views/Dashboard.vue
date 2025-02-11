@@ -1,11 +1,9 @@
 <template>
     <div class="dashboard-container">
-      <!-- Cabeçalho com botão de editar perfil -->
       <header class="dashboard-header">
         <Button class="edit-profile-button" @click="goToEditProfile">Editar Perfil</Button>
       </header>
   
-      <!-- Conteúdo principal com os botões de opções -->
       <main class="dashboard-main">
         <h1>Bem-vindo, {{ userNome }}!</h1>
         <div class="options">
@@ -25,31 +23,29 @@
   const router = useRouter();
   const userNome = ref("");
   
-  // Busca os dados do usuário ao carregar a tela
   onMounted(() => {
     const user = JSON.parse(localStorage.getItem("user"));
     if (!user) {
-      router.push("/login"); // Redireciona para o login se não estiver logado
+      router.push("/login"); 
     } else {
-      userNome.value = user.nome; // Exibe o nome do usuário
+      userNome.value = user.nome;
     }
   });
   
-  // Funções de redirecionamento
   const goToParticipante = () => {
-    router.push("/participante"); // Redireciona para a tela de participante
+    router.push("/participante");
   };
   
   const goToPalestrante = () => {
-    router.push("/palestrante"); // Redireciona para a tela de palestrante
+    router.push("/palestrante");
   };
   
   const goToOrganizador = () => {
-    router.push("/organizador"); // Redireciona para a tela de organizador
+    router.push("/organizador");
   };
   
   const goToEditProfile = () => {
-    router.push("/editar-perfil"); // Redireciona para a tela de edição de perfil
+    router.push("/editar-perfil");
   };
   </script>
   

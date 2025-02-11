@@ -7,7 +7,6 @@
         <Input v-model="form.data" type="date" placeholder="Data" />
         <Input v-model="form.horario" type="time" placeholder="Horário" />
   
-        <!-- Dropdown para locais -->
         <select v-model="form.idLocal" class="dropdown">
           <option v-for="local in locais" :key="local.id" :value="local.id">
             {{ local.nome }}
@@ -31,7 +30,6 @@
   const router = useRouter();
   const route = useRoute();
   
-  // Formulário de edição
   const form = ref({
     nome: "",
     descricao: "",
@@ -40,15 +38,12 @@
     idLocal: ""
   });
   
-  // Lista de locais para o dropdown
   const locais = ref([]);
   
-  // Mensagem de erro
   const errorMessage = ref("");
   
-  // Função para carregar os dados do evento
   const loadEvento = async () => {
-    const eventoId = route.params.id; // Captura o ID da rota
+    const eventoId = route.params.id;
     if (!eventoId) {
       errorMessage.value = "ID do evento não encontrado!";
       return;
@@ -57,35 +52,32 @@
     try {
       const evento = await EventoController.getEvento(eventoId);
       if (evento) {
-        // Preenche o formulário com os dados do evento
         form.value = {
           nome: evento.nome,
           descricao: evento.descricao,
           data: evento.data, 
           horario: evento.horario,
-          idLocal: evento.idLocal // Associa ao ID do local
+          idLocal: evento.idLocal
         };
       } else {
         errorMessage.value = "Evento não encontrado!";
       }
     } catch (error) {
       errorMessage.value = "Erro ao carregar os dados do evento.";
-      console.error(error); // Ajuda a depurar o erro
+      console.error(error);
     }
   };
   
-  // Função para carregar a lista de locais
   const loadLocais = async () => {
     try {
       const locaisResponse = await LocalController.getLocais();
       locais.value = locaisResponse;
     } catch (error) {
       errorMessage.value = "Erro ao carregar os locais.";
-      console.error(error); // Ajuda a depurar o erro
+      console.error(error);
     }
   };
   
-  // Função para enviar o formulário
   const handleSubmit = async () => {
   if (!form.value.nome || !form.value.descricao || !form.value.data || !form.value.horario || !form.value.idLocal) {
     errorMessage.value = "Preencha todos os campos obrigatórios!";
@@ -93,30 +85,25 @@
   }
 
   try {
-    // Recuperar o usuário logado do localStorage
     const organizadorIdSessao = JSON.parse(localStorage.getItem("user")).id;
 
-    // Criar o objeto de atualização com o ID do organizador
     const eventoId = route.params.id;
     const updateData = {
       ...form.value,
-      idOrganizador: organizadorIdSessao, // Adicionar o ID do organizador
+      idOrganizador: organizadorIdSessao,
     };
 
-    // Chamar o método de atualização
     console.log("Dados enviados para o backend:", updateData)
     await EventoController.updateEvento(eventoId, updateData);
 
     alert("Evento atualizado com sucesso!");
-    router.push("/organizador"); // Redireciona para a página do organizador
+    router.push("/organizador");
   } catch (error) {
     errorMessage.value = "Erro ao atualizar o evento.";
-    console.error(error); // Ajuda a depurar o erro
+    console.error(error);
   }
 };
 
-  
-  // Carrega os dados do evento e a lista de locais ao montar o componente
   onMounted(() => {
     loadEvento();
     loadLocais();
@@ -147,7 +134,7 @@
   }
   
   .link {
-    cursor: pointer; /* Altera o cursor para pointer */
+    cursor: pointer;
   }
   </style>
   

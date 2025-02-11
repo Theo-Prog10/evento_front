@@ -1,37 +1,50 @@
 <template>
   <header class="palestrante-header">
-    <Button class = "button" @click="goToDashboard">Dashboard</Button>
+    <Button class="button" @click="goToDashboard">Dashboard</Button>
   </header>
   <div class="palestrante-container">
     <div class="esquerda">
       <h1>Eventos Disponíveis</h1>
-      <div v-if="eventosDisponiveis.length > 0" class="eventos-lista">
-        <div v-for="evento in eventosDisponiveis" :key="evento.id" class="evento-item">
-          <h2>{{ evento.nome }}</h2>
-          <p>{{ evento.descricao }}</p>
-          <p>{{ evento.nomeLocal }}</p>
-          <p>{{ formatarData(evento.data) }} - {{ evento.horario }}</p>
-          <Button @click="inscrever(evento.id)">Inscrever-se como Palestrante</Button>
-        </div>
+      <div v-if="loading" class="loading-container">
+        <div class="spinner"></div>
+        <p>Carregando eventos disponíveis...</p>
       </div>
-      <p v-else>Nenhum evento disponível no momento.</p>
+      <div v-else>
+        <div v-if="eventosDisponiveis.length > 0" class="eventos-lista">
+          <div v-for="evento in eventosDisponiveis" :key="evento.id" class="evento-item">
+            <h2>{{ evento.nome }}</h2>
+            <p>{{ evento.descricao }}</p>
+            <p>{{ evento.nomeLocal }}</p>
+            <p>{{ formatarData(evento.data) }} - {{ evento.horario }}</p>
+            <Button @click="inscrever(evento.id)">Inscrever-se como Palestrante</Button>
+          </div>
+        </div>
+        <p v-else>Nenhum evento disponível no momento.</p>
+      </div>
     </div>
     
     <div class="direita">
       <h1>Eventos Palestrados</h1>
-      <div v-if="eventosPalestrados.length > 0" class="eventos-lista">
-        <div v-for="evento in eventosPalestrados" :key="evento.id" class="evento-item">
-          <span>{{ evento.nome }}</span>
-          <span>{{ evento.descricao }}</span>
-          <span>{{ evento.nomeLocal }}</span>
-          <span>{{ formatarData(evento.data) }} - {{ evento.horario }}</span>
-          <Button class="sair" @click="sair(evento.id)">Sair do Evento</Button>
-        </div>
+      <div v-if="loading" class="loading-container">
+        <div class="spinner"></div>
+        <p>Carregando eventos palestrados...</p>
       </div>
-      <p v-else>Você não está palestrando em nenhum evento.</p>
+      <div v-else>
+        <div v-if="eventosPalestrados.length > 0" class="eventos-lista">
+          <div v-for="evento in eventosPalestrados" :key="evento.id" class="evento-item">
+            <span>{{ evento.nome }}</span>
+            <span>{{ evento.descricao }}</span>
+            <span>{{ evento.nomeLocal }}</span>
+            <span>{{ formatarData(evento.data) }} - {{ evento.horario }}</span>
+            <Button class="sair" @click="sair(evento.id)">Sair do Evento</Button>
+          </div>
+        </div>
+        <p v-else>Você não está palestrando em nenhum evento.</p>
+      </div>
     </div>
   </div>
 </template>
+
 
 <script setup>
 import { ref, onMounted } from "vue";
@@ -42,10 +55,9 @@ import { useRouter } from "vue-router";
 
 const eventosDisponiveis = ref([]);
 const eventosPalestrados = ref([]);
-const palestranteId = JSON.parse(localStorage.getItem("user")).id; // ID do palestrante logado
+const palestranteId = JSON.parse(localStorage.getItem("user")).id;
 
 const router = useRouter();
-// Redireciona para o dashboard
 const goToDashboard = () => {
     router.push("/dashboard");
   };
@@ -55,8 +67,8 @@ const formatarData = (data) => {
   return `${dia}/${mes}/${ano}`;
 };
 
-// Busca os eventos disponíveis e os eventos palestrados ao carregar a tela
 onMounted(async () => {
+  loading.value = true;
   const eventos = await EventoController.getEventos();
 
   eventosDisponiveis.value = eventos.filter(
@@ -66,32 +78,31 @@ onMounted(async () => {
   eventosPalestrados.value = eventos.filter(
     (evento) => Array.isArray(evento.palestrantes) && evento.palestrantes.includes(palestranteId)
   );
+  loading.value = false;
 });
 
 const loading = ref(false);
 
-// Inscreve o palestrante em um evento
 const inscrever = async (eventoId) => {
-  if (loading.value) return; // Evita múltiplas inscrições
+  if (loading.value) return;
   loading.value = true;
   const success = await InscricaoController.inscreverPalestrante(eventoId, palestranteId);
   if (success) {
     alert("Inscrito como palestrante com sucesso!");
-    window.location.reload(); // Recarrega a página para atualizar a lista
+    window.location.reload();
   } else {
     alert("Erro ao inscrever-se como palestrante.");
   }
   loading.value = false;
 };
 
-// Remove o palestrante de um evento
 const sair = async (eventoId) => {
-  if (loading.value) return; // Evita múltiplas ações
+  if (loading.value) return;
   loading.value = true;
   const success = await InscricaoController.removerPalestrante(eventoId, palestranteId);
   if (success) {
     alert("Você saiu do evento com sucesso!");
-    window.location.reload(); // Recarrega a página para atualizar a lista
+    window.location.reload();
   } else {
     alert("Erro ao sair do evento.");
   }
@@ -151,4 +162,31 @@ const sair = async (eventoId) => {
     margin-bottom: 20px;
     padding: 20px;
   }
+
+  .loading-container {
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    justify-content: center;
+    gap: 10px;
+    margin: 20px 0;
+}
+
+.spinner {
+    border: 4px solid #f3f3f3;
+    border-top: 4px solid #4caf50;
+    border-radius: 50%;
+    width: 40px;
+    height: 40px;
+    animation: spin 1s linear infinite;
+}
+
+@keyframes spin {
+    0% {
+        transform: rotate(0deg);
+    }
+    100% {
+        transform: rotate(360deg);
+    }
+}
 </style>

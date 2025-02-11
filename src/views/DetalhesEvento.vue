@@ -43,13 +43,11 @@
     return `${dia}/${mes}/${ano}`;
   };
   
-  // Busca os detalhes do evento ao carregar a tela
   onMounted(async () => {
     const eventoId = route.params.id;
     const eventoDetalhes = await EventoController.getEvento(eventoId);
     evento.value = eventoDetalhes;
   
-    // Busca os nomes dos palestrantes
     if (eventoDetalhes.palestrantes.length > 0) {
       const palestrantesNomes = await Promise.all(
         eventoDetalhes.palestrantes.map((id) => PessoaController.getProfile(id))
@@ -57,7 +55,6 @@
       palestrantes.value = palestrantesNomes.filter((p) => p !== null);
     }
   
-    // Busca os nomes dos participantes
     if (eventoDetalhes.participantes.length > 0) {
       const participantesNomes = await Promise.all(
         eventoDetalhes.participantes.map((id) => PessoaController.getProfile(id))

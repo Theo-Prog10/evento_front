@@ -1,14 +1,17 @@
 <template>
-    <div class="organizador-container">
-      <!-- Cabeçalho com botões de criar evento e local -->
-      <header class="organizador-header">
-        <Button class = "button" @click="goToDashboard">Dashboard</Button>
-        <Button class = "button" @click="goToCriarEvento">Criar Evento</Button>
-        <Button class = "button" @click="goToCriarLocal">Criar Local</Button>
-      </header>
-  
-      <!-- Lista de eventos organizados -->
-      <h1>Eventos Organizados</h1>
+  <div class="organizador-container">
+    <header class="organizador-header">
+      <Button class="button" @click="goToDashboard">Dashboard</Button>
+      <Button class="button" @click="goToCriarEvento">Criar Evento</Button>
+      <Button class="button" @click="goToCriarLocal">Criar Local</Button>
+    </header>
+
+    <h1>Eventos Organizados</h1>
+    <div v-if="loading" class="loading-container">
+      <div class="spinner"></div>
+      <p>Carregando eventos organizados...</p>
+    </div>
+    <div v-else>
       <div v-if="eventosOrganizados.length > 0" class="eventos-lista">
         <div v-for="evento in eventosOrganizados" :key="evento.id" class="evento-item">
           <h2>{{ evento.nome }}</h2>
@@ -24,7 +27,9 @@
       </div>
       <p v-else>Você não organiza nenhum evento no momento.</p>
     </div>
-  </template>
+  </div>
+</template>
+
   
   <script setup>
   import { ref, onMounted } from "vue";
@@ -34,53 +39,50 @@
   
   const router = useRouter();
   const eventosOrganizados = ref([]);
-  const organizadorId = JSON.parse(localStorage.getItem("user")).id; // ID do organizador logado
+  const organizadorId = JSON.parse(localStorage.getItem("user")).id;
   
-  // Busca os eventos organizados ao carregar a tela
   onMounted(async () => {
+    loading.value = true;
     const eventos = await EventoController.getEventos();
     eventosOrganizados.value = eventos.filter(
       (evento) => evento.idOrganizador === organizadorId
     );
+    loading.value = false;
   });
+
+  const loading = ref(false);
 
   const formatarData = (data) => {
     const [ano, mes, dia] = data.split("-");
     return `${dia}/${mes}/${ano}`;
   };
   
-  // Redireciona para o dashboard
   const goToDashboard = () => {
     router.push("/dashboard");
   };
 
-  // Redireciona para a tela de criação de evento
   const goToCriarEvento = () => {
     router.push("/criar-evento");
   };
   
-  // Redireciona para a tela de criação de local
   const goToCriarLocal = () => {
     router.push("/criar-local");
   };
   
-  // Edita um evento (vamos implementar a tela de edição no futuro)
   const editarEvento = (eventoId) => {
     router.push(`/editar-evento/${eventoId}`);
   };
   
-  // Remove um evento
   const removerEvento = async (eventoId) => {
     const success = await EventoController.removerEvento(eventoId);
     if (success) {
       alert("Evento removido com sucesso!");
-      window.location.reload(); // Recarrega a página para atualizar a lista
+      window.location.reload();
     } else {
       alert("Erro ao deletar o evento.");
     }
   };
   
-  // Exibe os detalhes do evento
   const exibirDetalhes = (eventoId) => {
     router.push(`/detalhes-evento/${eventoId}`);
   };
@@ -137,4 +139,30 @@
     background-color: #4caf50;
     color: white;
   }
+  .loading-container {
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    justify-content: center;
+    gap: 10px;
+    margin: 20px 0;
+}
+
+.spinner {
+    border: 4px solid #f3f3f3;
+    border-top: 4px solid #4caf50;
+    border-radius: 50%;
+    width: 40px;
+    height: 40px;
+    animation: spin 1s linear infinite;
+}
+
+@keyframes spin {
+    0% {
+        transform: rotate(0deg);
+    }
+    100% {
+        transform: rotate(360deg);
+    }
+}
   </style>

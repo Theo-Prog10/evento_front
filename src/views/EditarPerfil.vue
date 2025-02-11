@@ -37,7 +37,6 @@
   });
   const errorMessage = ref("");
   
-  // Busca os dados do perfil ao carregar a tela
   onMounted(async () => {
     const user = JSON.parse(localStorage.getItem("user"));
     if (user) {
@@ -50,7 +49,6 @@
     }
   });
   
-  // Envia o formulário de edição
   const submitForm = async () => {
     try {
       await PessoaController.updateProfile(form.value.id, form.value);
@@ -61,7 +59,6 @@
     }
   };
   
-  // Volta para o dashboard
   const goBack = () => {
     router.push("/dashboard");
   };
