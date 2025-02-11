@@ -75,10 +75,10 @@
 
     await EventoController.register(updateData);
 
-    alert("Evento atualizado com sucesso!");
+    alert("Evento criado com sucesso!");
     router.push("/organizador");
   } catch (error) {
-    errorMessage.value = "Erro ao atualizar o evento.";
+    errorMessage.value = "Erro ao criar o evento.";
   }
 };
 
