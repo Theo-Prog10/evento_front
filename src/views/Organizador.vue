@@ -74,6 +74,8 @@
   };
   
   const removerEvento = async (eventoId) => {
+    if (loading.value) return;
+    loading.value = true;
     const success = await EventoController.removerEvento(eventoId);
     if (success) {
       alert("Evento removido com sucesso!");
